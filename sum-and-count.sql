@@ -33,7 +33,7 @@ COUNT(name)
 FROM world
 GROUP BY continent
 
--- 7. For each continent show the continent and number of countries with populations of at least 10 million.
+--- 7. For each continent show the continent and number of countries with populations of at least 10 million.
 
 SELECT continent, COUNT(name)
 FROM world

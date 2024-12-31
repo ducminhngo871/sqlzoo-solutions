@@ -119,46 +119,46 @@ SELECT name, ROUND(gdp/population,-3)
 
 
 -- 11.
--- The CASE statement shown is used to substitute North America for Caribbean in the third column.
+-- Show the name and capital where the name and the capital have the same number of characters.
 
 -- Show the name - but substitute Australasia for Oceania - for countries beginning with N.
 
 
-SELECT name, CASE WHEN continent='Oceania' THEN 'Australasia'
-                  ELSE continent END
+SELECT name, capital
   FROM world
- WHERE name LIKE 'N%'
+ WHERE LENGTH(name) = LENGTH(capital) 
 ;
 
 
 -- 12.
--- Show the name and the continent - but substitute Eurasia for Europe and Asia; substitute America - for each country in North America or South America or Caribbean. Show countries beginning with A or B
+-- The capital of Sweden is Stockholm. Both words start with the letter 'S'.
 
+-- Show the name and the capital where the first letters of each match. Don't include countries where the name and the capital are the same word.
+-- You can use the function LEFT to isolate the first character.
+-- You can use <> as the NOT EQUALS operator.
 
-SELECT name, CASE WHEN continent IN ('Europe','Asia') THEN 'Eurasia'
-                  WHEN continent IN ('North America','South America','Caribbean') THEN 'America'
-                  ELSE continent END
-  FROM world
- WHERE name BETWEEN 'A' AND 'C'
+SELECT name, capital
+FROM world
+WHERE LEFT(name,1) = LEFT(capital,1)
+AND name <> capital
 ;
-
-
 
 -- 13.
--- Put the continents right...
 
--- Oceania becomes Australasia
--- Countries in Eurasia and Turkey go to Europe/Asia
--- Caribbean islands starting with 'B' go to North America, other Caribbean islands go to South America
--- Order by country name in ascending order
--- Show the name, the original continent and the new continent of all countries.
+-- Equatorial Guinea and Dominican Republic have all of the vowels (a e i o u) in the name. They don't count because they have more than one word in the name.
 
-SELECT name,continent,
-  CASE WHEN continent = 'Eurasia' OR name='Turkey' THEN 'Europe/Asia'
-       WHEN continent IN ('Oceania') THEN 'Australasia'
-       WHEN continent = 'Caribbean' AND name LIKE 'B%' THEN 'North America'
-       WHEN continent = 'Caribbean' THEN 'South America'
-       ELSE continent END
-  FROM world
-ORDER BY name
-;
+-- Find the country that has all the vowels and no spaces in its name.
+
+-- Two solutions
+
+SELECT name
+FROM world
+WHERE name REGEXP 'a' 
+  AND name REGEXP 'e' 
+  AND name REGEXP 'i' 
+  AND name REGEXP 'o' 
+  AND name REGEXP 'u' 
+  AND name NOT LIKE '% %';
+
+SELECT name FROM world
+WHERE name LIKE '%a%' AND name LIKE '%e%' AND name LIKE '%i%' AND name LIKE '%o%' AND name LIKE '%u%' AND name NOT LIKE '% %';
